@@ -24,6 +24,33 @@ if not httprequest then
     return
 end
 
+-- WHITELIST USERNAME (dùng tên tài khoản Roblox, không phân biệt hoa thường)
+local WHITELIST_USERNAMES = {
+    "Nguu",              -- mày
+    "CuTheNguu",         -- ví dụ
+    "Friend1Roblox",     -- thêm bạn bè
+    "abcxyz123",         -- thêm nữa tùy ý
+}
+
+local player = game.Players.LocalPlayer
+local myUsername = player.Name:lower()  -- chuyển hết về chữ thường để so sánh ko phân biệt hoa/thường
+
+local isWhitelisted = false
+for _, allowed in ipairs(WHITELIST_USERNAMES) do
+    if myUsername == allowed:lower() then
+        isWhitelisted = true
+        break
+    end
+end
+
+if not isWhitelisted then
+    warn("CHANBAOHUB - Username '" .. player.Name .. "' không có trong whitelist!")
+    -- player:Kick("Không có quyền sử dụng script!")  -- muốn kick thì bỏ comment dòng này
+    return  -- dừng script luôn
+end
+
+print("CHANBAOHUB - Whitelist OK cho username: " .. player.Name)
+
 local function checkForUpdatesAndLoadOnce(url)
     local lastCode = ""
     local hasLoaded = false
