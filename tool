@@ -71,7 +71,7 @@ local function checkForUpdatesAndLoadOnce(url)
     end)
 end
 
--- LINK SOURCE MỚI CỦA MÀY CHO KING LEGACY (SẠCH HOÀN TOÀN, THAY THẾ GIST 1 CŨ)
+-- LINK SOURCE MỚI CỦA MÀY CHO KING LEGACY (SẠCH HOÀN TOÀN, THAY THẾ GIST 1 CŨ) .QjM5y4MH.d99D!
 local KING_LEGACY_HUB = "https://raw.githubusercontent.com/imaxspeedl12-collab/cbv2/refs/heads/main/SOURCE%20HOP"
 
 -- Load hub theo game
