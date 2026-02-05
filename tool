@@ -3,7 +3,6 @@ if CHANBAOHUB_LOADED and not _G.CHANBAOHUB_DEBUG == true then
     return
 end
 pcall(function() getgenv().CHANBAOHUB_LOADED = true end)
-
 local loadgame = game
 repeat task.wait() until loadgame:IsLoaded() and game.Players.LocalPlayer
 
@@ -24,9 +23,46 @@ if not httprequest then
     return
 end
 
+-- ================== WHITELIST BẰNG USERNAME TỪ PASTEBIN ==================
 local player = game.Players.LocalPlayer
-local myUsername = player.Name:lower()  -- chuyển về lowercase để so sánh ko phân biệt hoa/thường
+local myUsername = player.Name:lower()  -- lowercase để so sánh ko phân biệt
 
+-- THAY LINK NÀY BẰNG LINK RAW THẬT CỦA MÀY
+local WHITELIST_URL = "https://pastebin.com/raw/bCzb1um3"  -- <-- EDIT Ở ĐÂY, thay ABC123DEF bằng code thật
+
+print("CHANBAOHUB - Đang check whitelist từ: " .. WHITELIST_URL)
+
+local success, data = pcall(function()
+    return game:HttpGet(WHITELIST_URL .. "?t=" .. os.time(), true)
+end)
+
+if not success then
+    warn("CHANBAOHUB - Load whitelist FAIL: " .. tostring(data))  -- in lỗi chi tiết (ví dụ HTTP 404, 403)
+    -- return  -- comment tạm nếu muốn cho chạy dù fail
+else
+    if data == "" or data:find("Not Found") then
+        warn("CHANBAOHUB - Pastebin rỗng hoặc không tồn tại!")
+    else
+        print("CHANBAOHUB - Load OK, nội dung mẫu: " .. (data:sub(1, 100) or "rỗng"))  -- debug xem data có gì
+        local allowed = {}
+        for line in data:gmatch("[^\r\n]+") do
+            line = line:match("^%s*(.-)%s*$"):gsub("%s+", "")  -- trim space/tab thừa
+            if line ~= "" and not line:match("^%-%-") then
+                allowed[line:lower()] = true
+            end
+        end
+        
+        print("Username của mày: " .. myUsername)
+        if allowed[myUsername] then
+            print("CHANBAOHUB - Whitelist OK! Username hợp lệ.")
+        else
+            warn("CHANBAOHUB - Username '" .. player.Name .. "' KHÔNG có trong whitelist!")
+            -- player:Kick("Không có quyền dùng CHANBAOHUB!")  -- uncomment nếu muốn kick
+            return  -- dừng script nếu ko whitelist
+        end
+    end
+end
+-- ================== END WHITELIST ==================
 
 local function checkForUpdatesAndLoadOnce(url)
     local lastCode = ""
@@ -48,7 +84,7 @@ local function checkForUpdatesAndLoadOnce(url)
     end)
 end
 
--- LINK SOURCE MỚI CỦA MÀY CHO KING LEGACY (SẠCH HOÀN TOÀN, THAY THẾ GIST 1 CŨ) .QjM5y4MH.d99D!
+-- LINK SOURCE MỚI CỦA MÀY CHO KING LEGACY (SẠCH HOÀN TOÀN, THAY THẾ GIST 1 CŨ)
 local KING_LEGACY_HUB = "https://raw.githubusercontent.com/imaxspeedl12-collab/cbv2/refs/heads/main/SOURCE%20HOP"
 
 -- Load hub theo game
