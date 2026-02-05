@@ -27,45 +27,6 @@ end
 local player = game.Players.LocalPlayer
 local myUsername = player.Name:lower()  -- chuyển về lowercase để so sánh ko phân biệt hoa/thường
 
--- LINK WHITELIST (thay bằng link raw thật của mày)
-local WHITELIST_URL = "https://pastebin.com/raw/bCzb1um3"  -- <-- edit link này
-
-local success, data = pcall(function()
-    return game:HttpGet(WHITELIST_URL .. "?t=" .. os.time(), true)
-end)
-
-if not success or not data or data == "" then
-    warn("CHANBAOHUB - Load whitelist từ Pastebin thất bại! (Link sai hoặc mạng lỗi)")
-    -- return  -- uncomment nếu muốn dừng script khi fail
-    -- Hoặc fallback: cho chạy tiếp nếu mày muốn
-else
-    local allowed = {}
-    for line in data:gmatch("[^\r\n]+") do
-        line = line:match("^%s*(.-)%s*$")  -- trim khoảng trắng đầu/cuối dòng
-        if line ~= "" and not line:match("^%s*%-%-") then  -- bỏ qua dòng trống hoặc comment
-            allowed[line:lower()] = true  -- lưu lowercase
-        end
-    end
-
-    if not allowed[myUsername] then
-        warn("CHANBAOHUB - Username '" .. player.Name .. "' KHÔNG có trong whitelist!")
-        -- player:Kick("Không có quyền dùng script!")  -- uncomment nếu muốn kick
-        return
-    end
-
-    print("CHANBAOHUB - Whitelist OK! Username: " .. player.Name)
-end
-
--- Tiếp tục load hub như bình thường
--- if checksea1() or ... then checkForUpdatesAndLoadOnce(KING_LEGACY_HUB) end
-
-if not isWhitelisted then
-    warn("CHANBAOHUB - Username '" .. player.Name .. "' không có trong whitelist!")
-    -- player:Kick("Không có quyền sử dụng script!")  -- muốn kick thì bỏ comment dòng này
-    return  -- dừng script luôn
-end
-
-print("CHANBAOHUB - Whitelist OK cho username: " .. player.Name)
 
 local function checkForUpdatesAndLoadOnce(url)
     local lastCode = ""
