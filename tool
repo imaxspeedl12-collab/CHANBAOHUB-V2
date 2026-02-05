@@ -26,7 +26,7 @@ end
 
 -- WHITELIST USERNAME (dùng tên tài khoản Roblox, không phân biệt hoa thường)
 local WHITELIST_USERNAMES = {
-    "Nguu",              -- mày
+    "XxAidenLightStormyxX",              -- mày
     "CuTheNguu",         -- ví dụ
     "Friend1Roblox",     -- thêm bạn bè
     "abcxyz123",         -- thêm nữa tùy ý
